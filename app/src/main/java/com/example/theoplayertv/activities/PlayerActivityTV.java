@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.theoplayertv.R;
 import com.example.theoplayertv.adapters.AdaptadorCanales;
+import com.example.theoplayertv.adapters.AdapterChannels;
 import com.example.theoplayertv.api.RetrofitClient;
 import com.example.theoplayertv.models.Canal;
 import com.example.theoplayertv.models.Categoria;
@@ -21,11 +22,6 @@ import com.example.theoplayertv.models.Channel;
 import com.example.theoplayertv.models.ChannelResponse;
 import com.example.theoplayertv.models.LoginResponse;
 import com.theoplayer.android.api.THEOplayerView;
-import com.theoplayer.android.api.event.EventListener;
-import com.theoplayer.android.api.event.player.PauseEvent;
-import com.theoplayer.android.api.event.player.PlayEvent;
-import com.theoplayer.android.api.event.player.PlayerEventTypes;
-import com.theoplayer.android.api.event.player.TimeUpdateEvent;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.SourceType;
 import com.theoplayer.android.api.source.TypedSource;
@@ -47,9 +43,10 @@ public class PlayerActivityTV extends Activity {
     Spinner sp_categorias;
     ListView listaCanales;
     AdaptadorCanales adaptadorCanales;
+    AdapterChannels adapterChannels;
 
     List<Categoria> cat = null;  //Lista de Objetos Categoria
-    List<Channel> channel = null; //Lista de Objetos Channel
+    ArrayList<Channel> channels = null; //Lista de Objetos Channel
 
     double volumen = 0.5;
     String stream = "";
@@ -87,10 +84,12 @@ public class PlayerActivityTV extends Activity {
         txtTimeUpdate = findViewById(R.id.txt_timeupdate);
         //Selector de Categorias
         sp_categorias = (Spinner) findViewById(R.id.sp_canales);
+        //Lista de Canales
         listaCanales = (ListView) findViewById(R.id.lista_canales) ;
 
         //Poblando listview de Canales
         loadChannels(auth);
+        /*
         final ArrayList<Canal> listChannel = new ArrayList<>();
         listChannel.add(new Canal(R.drawable.canal10,"Canal 10 - TVES", "Locales","https://xcdrsbsv-cf.beenet.com.sv/local10_720/local10_720_out/playlist.m3u8"));
         listChannel.add(new Canal(R.drawable.discoverychannel,"Discovery Channel","Cultural","https://xcdrsbsv-cf.beenet.com.sv/DiscoveryChannel_720/DiscoveryChannel_720_out/playlist.m3u8"));
@@ -98,7 +97,7 @@ public class PlayerActivityTV extends Activity {
         listChannel.add(new Canal(R.drawable.foxsports,"FoxSports","Deportes","https://xcdrsbsv-cf.beenet.com.sv/foxsports2_720/foxsports2_720_out/playlist.m3u8"));
         adaptadorCanales = new AdaptadorCanales(this,listChannel);
         listaCanales.setAdapter(adaptadorCanales);
-
+        */
 
         //Poblando Spinner de Categorias con arraylist
         loadCategories(auth);
@@ -199,9 +198,10 @@ public class PlayerActivityTV extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Canal canal = listChannel.get(position);
+                Channel canal = channels.get(position);
+                Toast.makeText(getApplicationContext(),canal.getTitle(),Toast.LENGTH_LONG).show();
                 //Llamando para reiniciar el player con la Nueva URL
-                iniciarPlayer(canal.getUrl());
+                //iniciarPlayer(canal.getUrl());
 
             }
         });
@@ -353,7 +353,7 @@ public class PlayerActivityTV extends Activity {
             public void onResponse(Call<ChannelResponse> call, Response<ChannelResponse> response) {
                 ChannelResponse channelResponse = response.body();
 
-                channel = new ArrayList<>();
+                channels = new ArrayList<>();
 
                 if (channelResponse != null){
                     Toast.makeText(getApplicationContext(),"Objeto Lleno",Toast.LENGTH_LONG).show();
@@ -362,7 +362,18 @@ public class PlayerActivityTV extends Activity {
                     for (Channel channel : channelResponse.getResponse_object()) {
                         System.out.println("ID: "+ channel.getGenre_id() + " - " + channel.getId() + "  -  " + channel.getTitle() + " - " + channel.getIcon_url());
 
+                        channels.add(new Channel(
+                                channel.getId(),
+                                channel.getGenre_id(),
+                                channel.getTitle(),
+                                channel.getIcon_url(),
+                                channel.getStream_url()
+                        ));
                     }
+
+                    adapterChannels = new AdapterChannels(getApplicationContext(),channels);
+                    listaCanales.setAdapter(adapterChannels);
+
                 }else{
                     Toast.makeText(getApplicationContext(), "Objeto Vacio", Toast.LENGTH_LONG).show();
                 }

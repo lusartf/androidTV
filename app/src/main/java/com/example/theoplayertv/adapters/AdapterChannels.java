@@ -53,7 +53,7 @@ public class AdapterChannels extends BaseAdapter {
         TextView url = (TextView) convertView.findViewById(R.id.url_canal);
 
         //Llenado
-        //logo.;
+        logo.setImageResource(R.drawable.ic_launcher_foreground);
         nombre.setText(channel.getTitle());
         categoria.setText(channel.getGenre_id());
         url.setText(channel.getStream_url());

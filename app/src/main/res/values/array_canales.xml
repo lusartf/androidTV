@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="combo_canales">
+        <item>Discovery Channel</item>
+        <item>Local 10</item>
+        <item>Investigation Discovery</item>
+    </string-array>
+</resources>

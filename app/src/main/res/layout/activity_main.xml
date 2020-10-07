@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MainActivity">
+
+    <com.theoplayer.android.api.THEOplayerView
+        android:id="@+id/theoplayer"
+        android:layout_width="737dp"
+        android:layout_height="480dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.061">
+
+    </com.theoplayer.android.api.THEOplayerView>
+
+
+    <Button
+        android:id="@+id/btn_playpause"
+        android:layout_width="121dp"
+        android:layout_height="39dp"
+        android:layout_marginBottom="8dp"
+        android:text="PLAY/PAUSE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.13"
+        app:layout_constraintStart_toStartOf="parent"></Button>
+
+    <Button
+        android:id="@+id/btn_muted"
+        android:layout_width="120dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
+        android:text="Muted"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_volumeplus" />
+
+    <Button
+        android:id="@+id/btn_volumeplus"
+        android:layout_width="49dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="8dp"
+        android:text=" + "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_fullscreen" />
+
+    <Button
+        android:id="@+id/btn_volumeminus"
+        android:layout_width="49dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="-"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_muted" />
+
+    <Button
+        android:id="@+id/btn_fullscreen"
+        android:layout_width="119dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="8dp"
+        android:text="Fullscreen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/lista_canales" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_playstatus"
+        app:layout_constraintLeft_toRightOf="@+id/btn_playpause"
+        app:layout_constraintTop_toBottomOf="@+id/theoplayer"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btn_playpause"
+        android:layout_marginLeft="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_timeupdate"
+        app:layout_constraintLeft_toRightOf="@+id/txt_playstatus"
+        app:layout_constraintTop_toBottomOf="@+id/theoplayer"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btn_playpause"
+        android:layout_marginLeft="20dp"/>
+
+    <ListView
+        android:id="@+id/lista_canales"
+        android:layout_width="211dp"
+        android:layout_height="477dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toEndOf="@+id/theoplayer"
+        tools:listitem="@layout/elemento_lista"
+        tools:visibility="visible" />
+
+    <Spinner
+        android:id="@+id/sp_canales"
+        android:layout_width="212dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="17dp"
+        app:layout_constraintBottom_toTopOf="@+id/lista_canales"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toEndOf="@+id/theoplayer"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.457" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="65dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="8dp"
+        android:text="Salir"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_playpause"
+        app:layout_constraintHorizontal_bias="0.363"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/theoplayer"
+        app:layout_constraintVertical_bias="0.285" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

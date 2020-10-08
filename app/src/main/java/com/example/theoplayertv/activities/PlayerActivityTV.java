@@ -12,10 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.theoplayertv.R;
-import com.example.theoplayertv.adapters.AdaptadorCanales;
+//import com.example.theoplayertv.adapters.AdaptadorCanales;
 import com.example.theoplayertv.adapters.AdapterChannels;
 import com.example.theoplayertv.api.RetrofitClient;
-import com.example.theoplayertv.models.Canal;
 import com.example.theoplayertv.models.Categoria;
 import com.example.theoplayertv.models.CategoriasResponse;
 import com.example.theoplayertv.models.Channel;
@@ -42,7 +41,7 @@ public class PlayerActivityTV extends Activity {
     TextView txtPlayStatus, txtTimeUpdate;
     Spinner sp_categorias;
     ListView listaCanales;
-    AdaptadorCanales adaptadorCanales;
+    //AdaptadorCanales adaptadorCanales;
     AdapterChannels adapterChannels;
 
     List<Categoria> cat = null;  //Lista de Objetos Categoria
@@ -92,18 +91,7 @@ public class PlayerActivityTV extends Activity {
         loadCategories(auth);
 
         //Poblando listview de Canales
-        loadChannels(auth);
-        /*
-        final ArrayList<Canal> listChannel = new ArrayList<>();
-        listChannel.add(new Canal(R.drawable.canal10,"Canal 10 - TVES", "Locales","https://xcdrsbsv-cf.beenet.com.sv/local10_720/local10_720_out/playlist.m3u8"));
-        listChannel.add(new Canal(R.drawable.discoverychannel,"Discovery Channel","Cultural","https://xcdrsbsv-cf.beenet.com.sv/DiscoveryChannel_720/DiscoveryChannel_720_out/playlist.m3u8"));
-        listChannel.add(new Canal(R.drawable.investigationdiscovery,"Investigation Discovery","Series y Peliculas","https://xcdrsbsv-cf.beenet.com.sv/inv_discovery_720/inv_discovery_720_out/playlist.m3u8"));
-        listChannel.add(new Canal(R.drawable.foxsports,"FoxSports","Deportes","https://xcdrsbsv-cf.beenet.com.sv/foxsports2_720/foxsports2_720_out/playlist.m3u8"));
-        adaptadorCanales = new AdaptadorCanales(this,listChannel);
-        listaCanales.setAdapter(adaptadorCanales);
-        */
-
-
+        getChannelResponse(auth);
 
         /**
          * FUNCIONES ONCLICK DE TODOS LOS ELEMENTOS EN PANTALLA
@@ -168,7 +156,7 @@ public class PlayerActivityTV extends Activity {
             }
         });
 
-        //Click boton Logout
+        /**Click boton Logout*/
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,21 +164,15 @@ public class PlayerActivityTV extends Activity {
             }
         });
 
-        //Click en Select(Spinner) de Categorias
+        /**Click en Select(Spinner) de Categorias*/
         sp_categorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Recupera nombre de Categoria seleccionada
-                /*
-                categoria_seleccionada = parent.getItemAtPosition(position).toString();
-                Toast.makeText(getApplicationContext(), "SELECCIONADA: " + categoria_seleccionada,Toast.LENGTH_LONG).show();
-                */
-
                 id_categoria = Integer.toString(cat.get(position).getId());
-                Toast.makeText(getApplicationContext(), "ID : " + id_categoria,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "ID : " + id_categoria,Toast.LENGTH_LONG).show();
 
                 //Envia Arraylist Channel, a funcion que filtra canales por categoria
-
                 if (channelResponse != null) {
                     loadChannelsByFilter(channelResponse, id_categoria);
                 }
@@ -203,16 +185,18 @@ public class PlayerActivityTV extends Activity {
             }
         });
 
-        //Clic en ListView de Canales
+        /**
+         * Click listview de Canales, Cambia los canales segun seleccion
+         **/
         listaCanales.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                //Obtiene el objeto Canal, al que se le hizo click
                 Channel canal = channels.get(position);
-                Toast.makeText(getApplicationContext(),canal.getStream_url(),Toast.LENGTH_LONG).show();
-                //Llamando para reiniciar el player con la Nueva URL
-                iniciarPlayer(canal.getStream_url());
+                //Toast.makeText(getApplicationContext(),canal.getStream_url(),Toast.LENGTH_LONG).show();
 
+                //Llamado para reiniciar el player con la Nueva URL
+                iniciarPlayer(canal.getStream_url());
             }
         });
 
@@ -265,7 +249,11 @@ public class PlayerActivityTV extends Activity {
 
      */
 
-    //Inicializa el Player con URL
+
+    /**
+     * Inicializa el player con URL
+     * Parametro: url valor de URL de canal.
+     * */
     public void iniciarPlayer(String url){
         //Si URL es vacia, asigne por defecto
         if(url == ""){
@@ -287,6 +275,10 @@ public class PlayerActivityTV extends Activity {
     }
 
     //Metodo Logout API
+    /**
+     *  Cerrar Sesion en API
+     *  parametro: Auth contiene la clave utilizada para transacciones con la API
+     * */
     public void postDataLogout(final String auth){
         Call<LoginResponse> call = RetrofitClient.getInstance().getApi()
                 .userLogout(auth);
@@ -310,7 +302,10 @@ public class PlayerActivityTV extends Activity {
         });
     }
 
-    //Metodo retorna todas las Categorias
+    /**
+     * Metodo conecta con API y carga lista de categorias a Spinner
+     * parametro: Auth contiene la clave utilizada para transacciones con la API
+     * */
     public void loadCategories(final String auth){
         Call<CategoriasResponse> call = RetrofitClient
                 .getInstance()
@@ -353,8 +348,12 @@ public class PlayerActivityTV extends Activity {
         });
     }
 
-    //Metodo retorna todos los Canales
-    public void loadChannels(final String auth){
+
+    /**
+     * Metodo conecta a API y obtiene objeto con Canales
+     * Parametro: Auth contiene la clave utilizado para transacciones con la API
+     * */
+    public void getChannelResponse(final String auth){
         Call<ChannelResponse> call = RetrofitClient
                 .getInstance()
                 .getApi()
@@ -363,31 +362,12 @@ public class PlayerActivityTV extends Activity {
         call.enqueue(new Callback<ChannelResponse>() {
             @Override
             public void onResponse(Call<ChannelResponse> call, Response<ChannelResponse> response) {
-                //ChannelResponse channelResponse = response.body();
+                //Guarda respuesta de API en channelResponse
                 channelResponse = response.body();
-
                 channels = new ArrayList<>();
 
                 if (channelResponse != null){
                     Toast.makeText(getApplicationContext(),"Objeto Lleno",Toast.LENGTH_LONG).show();
-                    /*
-                    //Agregar Canales a ListView (panel derecho)
-                    for (Channel channel : channelResponse.getResponse_object()) {
-                        System.out.println("ID: "+ channel.getGenre_id() + " - " + channel.getId() + "  -  " + channel.getTitle() + " - " + channel.getIcon_url());
-
-                        channels.add(new Channel(
-                                channel.getId(),
-                                channel.getGenre_id(),
-                                channel.getTitle(),
-                                channel.getIcon_url(),
-                                channel.getStream_url()
-                        ));
-                    }
-
-                    adapterChannels = new AdapterChannels(getApplicationContext(),channels);
-                    listaCanales.setAdapter(adapterChannels);
-                    */
-
                 }else{
                     Toast.makeText(getApplicationContext(), "Objeto Vacio", Toast.LENGTH_LONG).show();
                 }
@@ -401,34 +381,31 @@ public class PlayerActivityTV extends Activity {
         });
     }
 
+    /**
+     * Funcion Carga canales por Categoria
+     * Parametros: Lista de Canales, Id de la categoria
+     * */
     public void loadChannelsByFilter(ChannelResponse listChannel, String idCat){
 
         //Borrando Elementos de Arraylist
         channels.clear();
 
-        System.out.println("/****************** LISTA DE CANALES : "+ idCat +" ******************/");
-
-        if (idCat.equals("0")){
-            //System.out.println("IMPRIMIR TODOS LOS CANALES");
-            //Agregar Canales a ListView (panel derecho)
-            for (Channel channel : channelResponse.getResponse_object()) {
-                //System.out.println("Canal: " + channel.getTitle());
-                channels.add(new Channel(
-                        channel.getId(),
-                        channel.getGenre_id(),
-                        channel.getTitle(),
-                        channel.getIcon_url(),
-                        channel.getStream_url()
-                ));
-            }
-        }
-
-        //Agregar Canales a ListView (panel derecho)
+        //Agregar Canales a lista segun categoria o Todos
         for (Channel channel : channelResponse.getResponse_object()) {
-            //Filtrado
-            if(channel.getGenre_id().equals(idCat)) {
-                //System.out.println("Canal: " + channel.getTitle());
+            //Todas las Categorias
+            if (idCat.equals("0")){
                 channels.add(new Channel(
+                        channel.getId(),
+                        channel.getGenre_id(),
+                        channel.getTitle(),
+                        channel.getIcon_url(),
+                        channel.getStream_url()
+                ));
+            }
+
+            //Filtrado por Categoria
+            if(channel.getGenre_id().equals(idCat)) {
+               channels.add(new Channel(
                         channel.getId(),
                         channel.getGenre_id(),
                         channel.getTitle(),
@@ -438,6 +415,7 @@ public class PlayerActivityTV extends Activity {
             }
         }
 
+        //Envia el ArrayList de Canales a Adaptador de ListView
         adapterChannels = new AdapterChannels(getApplicationContext(),channels);
         listaCanales.setAdapter(adapterChannels);
 

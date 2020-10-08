@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.theoplayertv.R;
-import com.example.theoplayertv.models.Canal;
+
 import com.example.theoplayertv.models.Categoria;
 import com.example.theoplayertv.models.Channel;
 

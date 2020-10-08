@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.theoplayertv.R;
-//import com.example.theoplayertv.adapters.AdaptadorCanales;
+
 import com.example.theoplayertv.adapters.AdapterChannels;
 import com.example.theoplayertv.api.RetrofitClient;
 import com.example.theoplayertv.models.Categoria;

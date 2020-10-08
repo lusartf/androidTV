@@ -38,7 +38,7 @@ public class PlayerActivityTV extends Activity {
 
     THEOplayerView theoPlayerView;
     Button btnPlayPause, btnMute, btnFullscreen, btnVol_plus, btnVol_minus,btnLogout;
-    String auth, categoria_seleccionada, id_categoria;;
+    String auth, categoria_seleccionada,id_categoria;;
     TextView txtPlayStatus, txtTimeUpdate;
     Spinner sp_categorias;
     ListView listaCanales;
@@ -47,6 +47,7 @@ public class PlayerActivityTV extends Activity {
 
     List<Categoria> cat = null;  //Lista de Objetos Categoria
     ArrayList<Channel> channels = null; //Lista de Objetos Channel
+    ChannelResponse channelResponse; //Recibe la respuesta de API
 
     double volumen = 0.5;
     String stream = "";
@@ -87,6 +88,9 @@ public class PlayerActivityTV extends Activity {
         //Lista de Canales
         listaCanales = (ListView) findViewById(R.id.lista_canales) ;
 
+        //Poblando Spinner de Categorias con arraylist
+        loadCategories(auth);
+
         //Poblando listview de Canales
         loadChannels(auth);
         /*
@@ -99,8 +103,7 @@ public class PlayerActivityTV extends Activity {
         listaCanales.setAdapter(adaptadorCanales);
         */
 
-        //Poblando Spinner de Categorias con arraylist
-        loadCategories(auth);
+
 
         /**
          * FUNCIONES ONCLICK DE TODOS LOS ELEMENTOS EN PANTALLA
@@ -185,6 +188,13 @@ public class PlayerActivityTV extends Activity {
 
                 id_categoria = Integer.toString(cat.get(position).getId());
                 Toast.makeText(getApplicationContext(), "ID : " + id_categoria,Toast.LENGTH_LONG).show();
+
+                //Envia Arraylist Channel, a funcion que filtra canales por categoria
+
+                if (channelResponse != null) {
+                    loadChannelsByFilter(channelResponse, id_categoria);
+                }
+
             }
 
             @Override
@@ -260,13 +270,6 @@ public class PlayerActivityTV extends Activity {
         //Si URL es vacia, asigne por defecto
         if(url == ""){
             url = "https://xcdrsbsv-cf.beenet.com.sv/foxsports2_720/foxsports2_720_out/playlist.m3u8";  // B carga Bien
-            //url = "https://xcdrsbsv-cf.beenet.com.sv/espn1/espn1_out/playlist.m3u8";  // B se queda cargando como en nimble
-            //url = "https://xcdrsbsv-a.beenet.com.sv/foxnews_720/foxnews_720_out/playlist.m3u8"; // A Mensaje de CORS
-
-            //mago
-            //url = "https://xcdrsbsv-cf.beenet.com.sv/foxsports2/foxsports2_out/playlist.m3u8";  // B Se queda cargando
-            //url = "https://xcdrsbsv-b.beenet.com.sv/espn1/espn1_out/playlist.m3u8";  // B Muestra mensaje de CORS
-            //url = "https://xcdrsbsv-a.beenet.com.sv/foxnews_720/foxnews_720_out/playlist.m3u8"; // A Muestra CORS
         }
 
         TypedSource typedSource = TypedSource.Builder
@@ -322,6 +325,8 @@ public class PlayerActivityTV extends Activity {
                 cat = new ArrayList<>();
 
                 if(categoryResponse != null){
+                    //Agregando una Categoria 'TODOS'
+                    cat.add(new Categoria(0,"Todos"));
 
                     //Agregar Categorias a Spinner Categoria
                     for (Categoria categoria : categoryResponse.getResponse_object()) {
@@ -358,13 +363,14 @@ public class PlayerActivityTV extends Activity {
         call.enqueue(new Callback<ChannelResponse>() {
             @Override
             public void onResponse(Call<ChannelResponse> call, Response<ChannelResponse> response) {
-                ChannelResponse channelResponse = response.body();
+                //ChannelResponse channelResponse = response.body();
+                channelResponse = response.body();
 
                 channels = new ArrayList<>();
 
                 if (channelResponse != null){
                     Toast.makeText(getApplicationContext(),"Objeto Lleno",Toast.LENGTH_LONG).show();
-
+                    /*
                     //Agregar Canales a ListView (panel derecho)
                     for (Channel channel : channelResponse.getResponse_object()) {
                         System.out.println("ID: "+ channel.getGenre_id() + " - " + channel.getId() + "  -  " + channel.getTitle() + " - " + channel.getIcon_url());
@@ -380,6 +386,7 @@ public class PlayerActivityTV extends Activity {
 
                     adapterChannels = new AdapterChannels(getApplicationContext(),channels);
                     listaCanales.setAdapter(adapterChannels);
+                    */
 
                 }else{
                     Toast.makeText(getApplicationContext(), "Objeto Vacio", Toast.LENGTH_LONG).show();
@@ -394,4 +401,45 @@ public class PlayerActivityTV extends Activity {
         });
     }
 
+    public void loadChannelsByFilter(ChannelResponse listChannel, String idCat){
+
+        //Borrando Elementos de Arraylist
+        channels.clear();
+
+        System.out.println("/****************** LISTA DE CANALES : "+ idCat +" ******************/");
+
+        if (idCat.equals("0")){
+            //System.out.println("IMPRIMIR TODOS LOS CANALES");
+            //Agregar Canales a ListView (panel derecho)
+            for (Channel channel : channelResponse.getResponse_object()) {
+                //System.out.println("Canal: " + channel.getTitle());
+                channels.add(new Channel(
+                        channel.getId(),
+                        channel.getGenre_id(),
+                        channel.getTitle(),
+                        channel.getIcon_url(),
+                        channel.getStream_url()
+                ));
+            }
+        }
+
+        //Agregar Canales a ListView (panel derecho)
+        for (Channel channel : channelResponse.getResponse_object()) {
+            //Filtrado
+            if(channel.getGenre_id().equals(idCat)) {
+                //System.out.println("Canal: " + channel.getTitle());
+                channels.add(new Channel(
+                        channel.getId(),
+                        channel.getGenre_id(),
+                        channel.getTitle(),
+                        channel.getIcon_url(),
+                        channel.getStream_url()
+                ));
+            }
+        }
+
+        adapterChannels = new AdapterChannels(getApplicationContext(),channels);
+        listaCanales.setAdapter(adapterChannels);
+
+    }
 }

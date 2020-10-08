@@ -107,6 +107,8 @@
         android:layout_width="212dp"
         android:layout_height="36dp"
         android:layout_marginStart="17dp"
+        android:scrollbarThumbHorizontal="@color/lb_default_search_color"
+        android:spinnerMode="dropdown"
         app:layout_constraintBottom_toTopOf="@+id/lista_canales"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.333"

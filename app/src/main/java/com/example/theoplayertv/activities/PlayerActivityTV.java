@@ -259,8 +259,8 @@ public class PlayerActivityTV extends Activity {
     public void iniciarPlayer(String url){
         //Si URL es vacia, asigne por defecto
         if(url == ""){
-            //url = "https://xcdrsbsv-cf.beenet.com.sv/foxsports2_720/foxsports2_720_out/playlist.m3u8";  // B carga Bien
-            url = "https://xcdrsbsv-cf.beenet.com.sv/espn1/espn1_out/playlist.m3u8";  // B se queda cargando como en nimble
+            url = "https://xcdrsbsv-cf.beenet.com.sv/foxsports2_720/foxsports2_720_out/playlist.m3u8";  // B carga Bien
+            //url = "https://xcdrsbsv-cf.beenet.com.sv/espn1/espn1_out/playlist.m3u8";  // B se queda cargando como en nimble
             //url = "https://xcdrsbsv-a.beenet.com.sv/foxnews_720/foxnews_720_out/playlist.m3u8"; // A Mensaje de CORS
 
             //mago

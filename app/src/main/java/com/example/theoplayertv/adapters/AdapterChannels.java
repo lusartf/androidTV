@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.theoplayertv.R;
 import com.example.theoplayertv.models.Canal;
 import com.example.theoplayertv.models.Channel;
@@ -53,7 +54,11 @@ public class AdapterChannels extends BaseAdapter {
         TextView url = (TextView) convertView.findViewById(R.id.url_canal);
 
         //Llenado
-        logo.setImageResource(R.drawable.ic_launcher_foreground);
+        //logo.setImageResource(R.drawable.ic_launcher_foreground);
+        Glide
+                .with(context)
+                .load(channel.getIcon_url())
+                .into(logo);
         nombre.setText(channel.getTitle());
         categoria.setText(channel.getGenre_id());
         url.setText(channel.getStream_url());

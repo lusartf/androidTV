@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.theoplayertv.R;
 import com.example.theoplayertv.models.Canal;
+import com.example.theoplayertv.models.Categoria;
 import com.example.theoplayertv.models.Channel;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class AdapterChannels extends BaseAdapter {
 
     private Context context;
     private ArrayList<Channel> listItems;
+    private Categoria categoria;
 
     public AdapterChannels(Context context, ArrayList<Channel> listItems) {
         this.context = context;

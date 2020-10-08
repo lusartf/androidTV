@@ -32,36 +32,6 @@
         app:layout_constraintStart_toStartOf="parent"></Button>
 
     <Button
-        android:id="@+id/btn_muted"
-        android:layout_width="120dp"
-        android:layout_height="38dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="8dp"
-        android:text="Muted"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_volumeplus" />
-
-    <Button
-        android:id="@+id/btn_volumeplus"
-        android:layout_width="49dp"
-        android:layout_height="38dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="8dp"
-        android:text=" + "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_fullscreen" />
-
-    <Button
-        android:id="@+id/btn_volumeminus"
-        android:layout_width="49dp"
-        android:layout_height="38dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="-"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_muted" />
-
-    <Button
         android:id="@+id/btn_fullscreen"
         android:layout_width="119dp"
         android:layout_height="38dp"
@@ -70,24 +40,6 @@
         android:text="Fullscreen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lista_canales" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txt_playstatus"
-        app:layout_constraintLeft_toRightOf="@+id/btn_playpause"
-        app:layout_constraintTop_toBottomOf="@+id/theoplayer"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btn_playpause"
-        android:layout_marginLeft="20dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txt_timeupdate"
-        app:layout_constraintLeft_toRightOf="@+id/txt_playstatus"
-        app:layout_constraintTop_toBottomOf="@+id/theoplayer"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btn_playpause"
-        android:layout_marginLeft="20dp"/>
 
     <ListView
         android:id="@+id/lista_canales"

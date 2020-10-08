@@ -15,16 +15,24 @@ import com.example.theoplayertv.models.Categoria;
 import com.example.theoplayertv.models.Channel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdapterChannels extends BaseAdapter {
 
     private Context context;
     private ArrayList<Channel> listItems;
-    private Categoria categoria;
+    private List<Categoria> listCategoria;
+    private String genero;
 
     public AdapterChannels(Context context, ArrayList<Channel> listItems) {
         this.context = context;
         this.listItems = listItems;
+    }
+
+    public AdapterChannels(Context context, ArrayList<Channel> listItems, List<Categoria> listCategoria) {
+        this.context = context;
+        this.listItems = listItems;
+        this.listCategoria = listCategoria;
     }
 
     @Override
@@ -55,14 +63,25 @@ public class AdapterChannels extends BaseAdapter {
         TextView categoria = (TextView) convertView.findViewById(R.id.cat_canal);
         TextView url = (TextView) convertView.findViewById(R.id.url_canal);
 
+        //Recorriendo Arraylist de Categorias
+        //System.out.println("---------------------------------- Dentro de AdapterChannel --------------------------------------");
+        for (int i = 0; i < listCategoria.size(); i++){
+            //System.out.println("Categoria: " + listCategoria.get(i).getName());
+
+            if (channel.getGenre_id().equals(Integer.toString(listCategoria.get(i).getId()))){
+                genero = listCategoria.get(i).getName();
+                System.out.println(" ------ ****** valor de genero: " + genero);
+            }
+        }
+
         //Llenado
-        //logo.setImageResource(R.drawable.ic_launcher_foreground);
+        //Se introduce la imagen dentro de ImageView con Glide,
         Glide
                 .with(context)
                 .load(channel.getIcon_url())
                 .into(logo);
         nombre.setText(channel.getTitle());
-        categoria.setText(channel.getGenre_id());
+        categoria.setText(genero);
         url.setText(channel.getStream_url());
 
         return convertView;

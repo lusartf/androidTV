@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.theoplayertv.R;
-
 import com.example.theoplayertv.adapters.AdapterChannels;
 import com.example.theoplayertv.api.RetrofitClient;
 import com.example.theoplayertv.models.Categoria;
@@ -24,6 +23,7 @@ import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.SourceType;
 import com.theoplayer.android.api.source.TypedSource;
+import com.theoplayer.android.api.player.PreloadType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public class PlayerActivityTV extends Activity {
     ArrayList<Channel> channels = null; //Lista de Objetos Channel
     ChannelResponse channelResponse; //Recibe la respuesta de API
 
-    double volumen = 0.5;
+    double volumen = 1;
     String stream = "";
 
     @Override
@@ -56,6 +56,7 @@ public class PlayerActivityTV extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Referenciando y parametros de Theoplayer
         theoPlayerView = findViewById(R.id.theoplayer);
         theoPlayerView.getSettings().setFullScreenOrientationCoupled(true);
         iniciarPlayer(stream);
@@ -73,15 +74,9 @@ public class PlayerActivityTV extends Activity {
          * */
         // Botones de control de player
         btnPlayPause = findViewById(R.id.btn_playpause);
-        btnMute = findViewById(R.id.btn_muted);
         btnFullscreen = findViewById(R.id.btn_fullscreen);
-        btnVol_plus = findViewById(R.id.btn_volumeplus);
-        btnVol_minus = findViewById(R.id.btn_volumeminus);
         //Boton de Cerrar sesion
         btnLogout = findViewById(R.id.btnLogout);
-        //Textos de ejemplo de player
-        txtPlayStatus = findViewById(R.id.txt_playstatus);
-        txtTimeUpdate = findViewById(R.id.txt_timeupdate);
         //Selector de Categorias
         sp_categorias = (Spinner) findViewById(R.id.sp_canales);
         //Lista de Canales
@@ -96,7 +91,8 @@ public class PlayerActivityTV extends Activity {
         /**
          * FUNCIONES ONCLICK DE TODOS LOS ELEMENTOS EN PANTALLA
          */
-        //Click boton Play/Pause
+
+        /** Click boton Play/Pause **/
         btnPlayPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,17 +104,7 @@ public class PlayerActivityTV extends Activity {
             }
         });
 
-        //Click boton Mute
-        btnMute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(theoPlayerView.getPlayer().isMuted() == true){
-                    theoPlayerView.getPlayer().setMuted(false);
-                }else{ theoPlayerView.getPlayer().setMuted(true); }
-            }
-        });
-
-        //Click Boton Pantalla Completa
+        /** Click Boton Pantalla Completa **/
         btnFullscreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,37 +112,7 @@ public class PlayerActivityTV extends Activity {
             }
         });
 
-        //Click boton Volumen +
-        btnVol_plus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(volumen < 1){
-                    volumen = volumen + 0.1;
-                    theoPlayerView.getPlayer().setVolume(volumen);
-                }
-
-                if(volumen >= 1){
-                    Toast.makeText(getApplicationContext(), "MAXIMO ALCANZADO", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        //Click boton Volumen -
-        btnVol_minus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(volumen > 0){
-                    volumen = volumen - 0.1;
-                    theoPlayerView.getPlayer().setVolume(volumen);
-                }
-
-                if(volumen <= 0){
-                    Toast.makeText(getApplicationContext(), "MINIMO ALCANZADO", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        /**Click boton Logout*/
+        /** Click boton Logout **/
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +120,7 @@ public class PlayerActivityTV extends Activity {
             }
         });
 
-        /**Click en Select(Spinner) de Categorias*/
+        /** Click en Select(Spinner) de Categorias **/
         sp_categorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -271,10 +227,10 @@ public class PlayerActivityTV extends Activity {
                 .build();
 
         theoPlayerView.getPlayer().setSource(sourceDescription);
+        //theoPlayerView.getPlayer().setPreload(PreloadType.METADATA);
 
     }
 
-    //Metodo Logout API
     /**
      *  Cerrar Sesion en API
      *  parametro: Auth contiene la clave utilizada para transacciones con la API
@@ -348,7 +304,6 @@ public class PlayerActivityTV extends Activity {
         });
     }
 
-
     /**
      * Metodo conecta a API y obtiene objeto con Canales
      * Parametro: Auth contiene la clave utilizado para transacciones con la API
@@ -416,7 +371,7 @@ public class PlayerActivityTV extends Activity {
         }
 
         //Envia el ArrayList de Canales a Adaptador de ListView
-        adapterChannels = new AdapterChannels(getApplicationContext(),channels);
+        adapterChannels = new AdapterChannels(getApplicationContext(),channels,cat);
         listaCanales.setAdapter(adapterChannels);
 
     }

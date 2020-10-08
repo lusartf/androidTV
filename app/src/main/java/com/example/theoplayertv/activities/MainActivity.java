@@ -63,9 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        txtPlayStatus = findViewById(R.id.txt_playstatus);
-        txtTimeUpdate = findViewById(R.id.txt_timeupdate);
-
         theoPlayerView.getPlayer().addEventListener(PlayerEventTypes.PLAY, new EventListener<PlayEvent>() {
             @Override
             public void handleEvent(PlayEvent playEvent) {
@@ -80,12 +77,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        theoPlayerView.getPlayer().addEventListener(PlayerEventTypes.TIMEUPDATE, new EventListener<TimeUpdateEvent>() {
-            @Override
-            public void handleEvent(TimeUpdateEvent timeUpdateEvent) {
-                txtTimeUpdate.setText(String.valueOf(timeUpdateEvent.getCurrentTime()));
-            }
-        });
     }
 
     @Override

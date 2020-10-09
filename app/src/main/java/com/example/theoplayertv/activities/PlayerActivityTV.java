@@ -2,6 +2,7 @@ package com.example.theoplayertv.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,7 +42,6 @@ public class PlayerActivityTV extends Activity {
     TextView txtPlayStatus, txtTimeUpdate;
     Spinner sp_categorias;
     ListView listaCanales;
-    //AdaptadorCanales adaptadorCanales;
     AdapterChannels adapterChannels;
 
     List<Categoria> cat = null;  //Lista de Objetos Categoria
@@ -109,8 +109,11 @@ public class PlayerActivityTV extends Activity {
             @Override
             public void onClick(View v) {
                 theoPlayerView.getFullScreenManager().requestFullScreen();
+
             }
         });
+
+
 
         /** Click boton Logout **/
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +186,7 @@ public class PlayerActivityTV extends Activity {
 
          */
     }
-    /*
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -203,7 +206,7 @@ public class PlayerActivityTV extends Activity {
     }
 
 
-     */
+
 
 
     /**
@@ -227,7 +230,7 @@ public class PlayerActivityTV extends Activity {
                 .build();
 
         theoPlayerView.getPlayer().setSource(sourceDescription);
-        //theoPlayerView.getPlayer().setPreload(PreloadType.METADATA);
+        theoPlayerView.getPlayer().setPreload(PreloadType.METADATA);
 
     }
 
@@ -323,6 +326,7 @@ public class PlayerActivityTV extends Activity {
 
                 if (channelResponse != null){
                     Toast.makeText(getApplicationContext(),"Objeto Lleno",Toast.LENGTH_LONG).show();
+                    loadChannelsByFilter(channelResponse,"0");
                 }else{
                     Toast.makeText(getApplicationContext(), "Objeto Vacio", Toast.LENGTH_LONG).show();
                 }
@@ -375,4 +379,47 @@ public class PlayerActivityTV extends Activity {
         listaCanales.setAdapter(adapterChannels);
 
     }
+
+    /**
+     * Metodo que captura acciones del D-PAD
+     * */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        boolean handled = false;
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_UP:
+                // ... handle left action
+                handled = true;
+                Toast.makeText(getApplicationContext(),"PRESIONASTE UP", Toast.LENGTH_SHORT).show();
+                nextChannel();
+                break;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                // ... handle right action
+                handled = true;
+                Toast.makeText(getApplicationContext(),"PRESIONASTE DOWN", Toast.LENGTH_SHORT).show();
+                previusChannel();
+                break;
+        }
+
+        return handled || super.onKeyDown(keyCode, event);
+    }
+
+    public void nextChannel(){
+        Toast.makeText(getApplicationContext(),"EN NEXTCHANNEL: " + theoPlayerView.getFullScreenManager().isFullScreen(),Toast.LENGTH_SHORT).show();
+        System.out.println("------------------------------------------");
+        if (!theoPlayerView.getFullScreenManager().isFullScreen()){
+            System.out.println("VALOR: " + theoPlayerView.getFullScreenManager().isFullScreen() + " IR A SIGUIENTE CANAL");
+            Toast.makeText(getApplicationContext(), "IR A SIGUIENTE CANAL", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void previusChannel(){
+        Toast.makeText(getApplicationContext(),"EN PREVIUSCHANNEL: " + theoPlayerView.getFullScreenManager().isFullScreen(),Toast.LENGTH_SHORT).show();
+        System.out.println("-----------------------------------------------------------------------------");
+        if (!theoPlayerView.getFullScreenManager().isFullScreen()){
+            System.out.println("VALOR: " + theoPlayerView.getFullScreenManager().isFullScreen() + " IR A CANAL PREVIO");
+            Toast.makeText(getApplicationContext(), " IR A CANAL PREVIO", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

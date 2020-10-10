@@ -63,6 +63,7 @@ public class PlayerActivityTV extends Activity {
         theoPlayerView.getPlayer().setAutoplay(true);
         theoPlayerView.getPlayer().setVolume(volumen);
 
+
         //Recuperando valor enviado proveniente de LoginActivityTV
         Bundle myBundle = this.getIntent().getExtras();
         if (myBundle != null){
@@ -112,8 +113,6 @@ public class PlayerActivityTV extends Activity {
 
             }
         });
-
-
 
         /** Click boton Logout **/
         btnLogout.setOnClickListener(new View.OnClickListener() {

@@ -16,15 +16,62 @@
 
         <com.theoplayer.android.api.THEOplayerView
             android:id="@+id/theoplayer"
-            android:layout_width="958dp"
-            android:layout_height="490dp"
+            android:layout_width="960dp"
+            android:layout_height="539dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.061" />
+            app:layout_constraintVertical_bias="0.061">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/btn_playpause"
+                    android:layout_width="121dp"
+                    android:layout_height="39dp"
+                    android:text="PLAY/PAUSE"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.141"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.962" />
+
+                <Button
+                    android:id="@+id/btn_fullscreen"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="119dp"
+                    android:layout_height="38dp"
+                    android:backgroundTint="#2CFFFFFF"
+                    android:text="Fullscreen"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.305"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.96" />
+
+                <Button
+                    android:id="@+id/btnLogout"
+                    android:layout_width="65dp"
+                    android:layout_height="42dp"
+                    android:text="Salir"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.037"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.967" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.theoplayer.android.api.THEOplayerView>
+
+        <!--
         <Button
             android:id="@+id/btn_playpause"
             android:layout_width="121dp"
@@ -36,34 +83,7 @@
             app:layout_constraintHorizontal_bias="0.13"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <!--
-                <ListView
-                    android:id="@+id/lista_canales"
-                    android:layout_width="211dp"
-                    android:layout_height="477dp"
-                    android:layout_marginStart="9dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.48"
-                    app:layout_constraintStart_toEndOf="@+id/theoplayer"
-                    tools:listitem="@layout/elemento_lista"
-                    tools:visibility="visible" />
 
-                <Spinner
-                    android:id="@+id/sp_canales"
-                    android:layout_width="212dp"
-                    android:layout_height="36dp"
-                    android:layout_marginStart="17dp"
-                    android:scrollbarThumbHorizontal="@color/lb_default_search_color"
-                    android:spinnerMode="dropdown"
-                    app:layout_constraintBottom_toTopOf="@+id/lista_canales"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.333"
-                    app:layout_constraintStart_toEndOf="@+id/theoplayer"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.457" />
-                -->
 
         <Button
             android:id="@+id/btn_fullscreen"
@@ -90,7 +110,7 @@
             app:layout_constraintEnd_toStartOf="@+id/btn_playpause"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent" />
-
+        -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

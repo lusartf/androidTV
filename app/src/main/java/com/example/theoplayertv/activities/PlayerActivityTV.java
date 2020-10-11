@@ -7,10 +7,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.constraintlayout.solver.widgets.WidgetContainer;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.theoplayertv.R;
 import com.example.theoplayertv.adapters.AdapterChannels;
@@ -36,10 +41,14 @@ import retrofit2.Response;
 
 public class PlayerActivityTV extends Activity {
 
+    DrawerLayout drawerLayout;
+    ConstraintLayout mainLayout, menuLateral;
     THEOplayerView theoPlayerView;
-    Button btnPlayPause, btnMute, btnFullscreen, btnVol_plus, btnVol_minus,btnLogout;
+    Button btnPlayPause,btnFullscreen,btnLogout;
     String auth, categoria_seleccionada,id_categoria;;
+    /*
     TextView txtPlayStatus, txtTimeUpdate;
+    */
     Spinner sp_categorias;
     ListView listaCanales;
     AdapterChannels adapterChannels;
@@ -50,6 +59,7 @@ public class PlayerActivityTV extends Activity {
 
     double volumen = 1;
     String stream = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +92,11 @@ public class PlayerActivityTV extends Activity {
         sp_categorias = (Spinner) findViewById(R.id.sp_canales);
         //Lista de Canales
         listaCanales = (ListView) findViewById(R.id.lista_canales) ;
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        //Contenedor Principal
+        mainLayout = (ConstraintLayout) findViewById(R.id.mainLayout);
+        //Menu Lateral
+        menuLateral = (ConstraintLayout) findViewById(R.id.menuLateral);
 
         //Poblando Spinner de Categorias con arraylist
         loadCategories(auth);
@@ -110,7 +125,6 @@ public class PlayerActivityTV extends Activity {
             @Override
             public void onClick(View v) {
                 theoPlayerView.getFullScreenManager().requestFullScreen();
-
             }
         });
 
@@ -186,6 +200,7 @@ public class PlayerActivityTV extends Activity {
          */
     }
 
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -203,10 +218,6 @@ public class PlayerActivityTV extends Activity {
         super.onDestroy();
         theoPlayerView.onDestroy();
     }
-
-
-
-
 
     /**
      * Inicializa el player con URL
@@ -382,6 +393,7 @@ public class PlayerActivityTV extends Activity {
     /**
      * Metodo que captura acciones del D-PAD
      * */
+    /*
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         boolean handled = false;
@@ -421,4 +433,6 @@ public class PlayerActivityTV extends Activity {
         }
     }
 
+
+     */
 }

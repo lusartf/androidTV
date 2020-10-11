@@ -25,15 +25,16 @@ import com.theoplayer.android.api.source.TypedSource;
 
 public class MainActivity extends AppCompatActivity {
 
+    /*
     THEOplayerView theoPlayerView;
     Button btnPlayPause;
     TextView txtPlayStatus, txtTimeUpdate;
-
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        /*
         theoPlayerView = findViewById(R.id.theoplayer);
         //theoPlayerView.getSettings().setFullScreenOrientationCoupled(true);
         TypedSource typedSource = TypedSource.Builder
@@ -76,9 +77,10 @@ public class MainActivity extends AppCompatActivity {
                 txtPlayStatus.setText("Paused");
             }
         });
-
+        */
     }
 
+    /*
     @Override
     protected void onPause() {
         super.onPause();
@@ -96,4 +98,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         theoPlayerView.onDestroy();
     }
+
+         */
 }

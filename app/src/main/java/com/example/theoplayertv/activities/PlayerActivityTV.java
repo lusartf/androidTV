@@ -401,20 +401,21 @@ public class PlayerActivityTV extends Activity {
             case KeyEvent.KEYCODE_DPAD_UP:
                 // ... handle left action
                 handled = true;
-                Toast.makeText(getApplicationContext(),"PRESIONASTE UP", Toast.LENGTH_SHORT).show();
-                nextChannel();
+                Toast.makeText(getApplicationContext(),"PRESIONASTE CENTER " + event.getDownTime()/1000, Toast.LENGTH_SHORT).show();
+                //nextChannel();
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 // ... handle right action
                 handled = true;
                 Toast.makeText(getApplicationContext(),"PRESIONASTE DOWN", Toast.LENGTH_SHORT).show();
-                previusChannel();
+                //previusChannel();
                 break;
         }
 
         return handled || super.onKeyDown(keyCode, event);
     }
-
+    */
+    /*
     public void nextChannel(){
         Toast.makeText(getApplicationContext(),"EN NEXTCHANNEL: " + theoPlayerView.getFullScreenManager().isFullScreen(),Toast.LENGTH_SHORT).show();
         System.out.println("------------------------------------------");
@@ -433,6 +434,6 @@ public class PlayerActivityTV extends Activity {
         }
     }
 
-
      */
+
 }

@@ -71,7 +71,7 @@
             android:layout_width="170dp"
             android:layout_height="50dp"
             android:layout_marginTop="25dp"
-            android:background="@drawable/custom_button"
+            android:background="@drawable/button_pressed"
             android:text="INGRESAR"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"

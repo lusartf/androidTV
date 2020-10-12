@@ -1,6 +1,7 @@
 package com.example.theoplayertv.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -44,7 +45,8 @@ public class PlayerActivityTV extends Activity {
     DrawerLayout drawerLayout;
     ConstraintLayout mainLayout, menuLateral;
     THEOplayerView theoPlayerView;
-    Button btnPlayPause,btnFullscreen,btnLogout;
+    //Button btnPlayPause,btnFullscreen;
+    //Button btnLogout;
     String auth, categoria_seleccionada,id_categoria;;
     /*
     TextView txtPlayStatus, txtTimeUpdate;
@@ -84,10 +86,10 @@ public class PlayerActivityTV extends Activity {
          * Referencia de elementos Visuales
          * */
         // Botones de control de player
-        btnPlayPause = findViewById(R.id.btn_playpause);
-        btnFullscreen = findViewById(R.id.btn_fullscreen);
+        //btnPlayPause = findViewById(R.id.btn_playpause);
+        //btnFullscreen = findViewById(R.id.btn_fullscreen);
         //Boton de Cerrar sesion
-        btnLogout = findViewById(R.id.btnLogout);
+        //btnLogout = findViewById(R.id.btnLogout);
         //Selector de Categorias
         sp_categorias = (Spinner) findViewById(R.id.sp_canales);
         //Lista de Canales
@@ -109,6 +111,7 @@ public class PlayerActivityTV extends Activity {
          */
 
         /** Click boton Play/Pause **/
+        /*
         btnPlayPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,22 +122,27 @@ public class PlayerActivityTV extends Activity {
                 }
             }
         });
+        */
 
         /** Click Boton Pantalla Completa **/
+        /*
         btnFullscreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 theoPlayerView.getFullScreenManager().requestFullScreen();
             }
         });
+        */
 
         /** Click boton Logout **/
+        /*
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 postDataLogout(auth);
             }
         });
+        */
 
         /** Click en Select(Spinner) de Categorias **/
         sp_categorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -258,7 +266,11 @@ public class PlayerActivityTV extends Activity {
                 LoginResponse loginResponse = response.body();
                 if (loginResponse.getStatus_code() == 200){
                     //Proceder a siguiente ventana
+                    Toast.makeText(getApplicationContext(),"Sesion Cerrada",Toast.LENGTH_LONG).show();
                     Toast.makeText(getApplicationContext(),loginResponse.getError_description(),Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent (getApplicationContext(), LoginActivityTV.class);
+                    startActivityForResult(intent, 0);
+
                 }else{
                     Toast.makeText(getApplicationContext(), loginResponse.getError_description(), Toast.LENGTH_LONG).show();
                 }
@@ -393,28 +405,46 @@ public class PlayerActivityTV extends Activity {
     /**
      * Metodo que captura acciones del D-PAD
      * */
-    /*
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         boolean handled = false;
         switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_DPAD_LEFT:
                 // ... handle left action
                 handled = true;
-                Toast.makeText(getApplicationContext(),"PRESIONASTE CENTER " + event.getDownTime()/1000, Toast.LENGTH_SHORT).show();
-                //nextChannel();
+                openList();
                 break;
-            case KeyEvent.KEYCODE_DPAD_DOWN:
+
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
                 // ... handle right action
                 handled = true;
-                Toast.makeText(getApplicationContext(),"PRESIONASTE DOWN", Toast.LENGTH_SHORT).show();
-                //previusChannel();
+                closeList();
                 break;
+
+            case KeyEvent.KEYCODE_BACK:
+                handled = true;
+                //Llamar a la funcion cerrar sesion
+                postDataLogout(auth);
+                break;
+
         }
 
         return handled || super.onKeyDown(keyCode, event);
     }
-    */
+
+    /** Funcion Despliega la vista Lateral **/
+    public void openList(){
+        if (!drawerLayout.isDrawerOpen(menuLateral)){
+            drawerLayout.openDrawer(menuLateral);
+        }
+    }
+
+    public void closeList(){
+        if (drawerLayout.isDrawerOpen(menuLateral)){
+            drawerLayout.closeDrawer(menuLateral);
+        }
+    }
+
     /*
     public void nextChannel(){
         Toast.makeText(getApplicationContext(),"EN NEXTCHANNEL: " + theoPlayerView.getFullScreenManager().isFullScreen(),Toast.LENGTH_SHORT).show();

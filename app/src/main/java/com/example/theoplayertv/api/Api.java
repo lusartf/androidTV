@@ -23,6 +23,7 @@ public interface Api {
     );
 
     @FormUrlEncoded
+    @POST("apiv2/credentials/logout")
     Call<LoginResponse> userLogout(
         @Field("auth") String auth
     );

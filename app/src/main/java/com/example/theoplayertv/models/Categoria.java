@@ -2,9 +2,13 @@ package com.example.theoplayertv.models;
 
 public class Categoria {
 
-    private int id;         // Id de Categoria API
-    private String name;    // Nombre categoria API
-    private String icon;    // URL de Imagen de Categoria API
+    /**
+     * Clase que modela el objeto JSON que trae las Categorias de la API
+     * */
+
+    private int id;
+    private String name;
+    private String icon;
 
     public Categoria(int id, String name) {
         this.id = id;

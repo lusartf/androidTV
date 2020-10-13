@@ -2,6 +2,10 @@ package com.example.theoplayertv.models;
 
 public class LoginResponse {
 
+    /**
+     * Clase que modela el objeto JSON  de Login que proviene de la API
+     * */
+
     private int status_code;
     private int error_code;
     private int timestamp;

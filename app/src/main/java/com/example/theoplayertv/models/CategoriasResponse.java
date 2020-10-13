@@ -4,7 +4,9 @@ import java.util.List;
 
 public class CategoriasResponse {
 
-    //Respuesta de API
+    /**
+     * Clase que modela (CategoriaResponse + categoria) el objeto JSON de Categoria que proviene de API
+     * */
     private int status_code;
     private int error_code;
     private int timestamp;

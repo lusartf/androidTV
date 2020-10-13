@@ -2,6 +2,9 @@ package com.example.theoplayertv.models;
 
 public class Channel {
 
+    /**
+     * Clase que modela el objeto JSON que trae los canales de la API
+     * */
     private String id;
     private String genre_id;
     private String title;

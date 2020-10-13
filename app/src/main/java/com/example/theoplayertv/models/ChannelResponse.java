@@ -4,7 +4,9 @@ import java.util.List;
 
 public class ChannelResponse {
 
-    //Respuesta de API
+    /**
+     * Clase que modela (ChannelResponse + Channel) el objeto JSON de Canales que proviene de API
+     * */
     private int status_code;
     private int error_code;
     private int timestamp;

@@ -38,26 +38,19 @@ import retrofit2.Response;
 
 public class PlayerActivityTV extends Activity {
 
-    DrawerLayout drawerLayout;
+    DrawerLayout drawerLayout; //Permite el despliegue de menu lateral en conjunto con mainLayout y menuLateral
     ConstraintLayout mainLayout, menuLateral;
     THEOplayerView theoPlayerView;
-    //Button btnPlayPause,btnFullscreen;
-    //Button btnLogout;
-    String auth, categoria_seleccionada,id_categoria;;
-    /*
-    TextView txtPlayStatus, txtTimeUpdate;
-    */
     Spinner sp_categorias;
     ListView listaCanales;
     AdapterChannels adapterChannels;
-
     List<Category> cat = null;  //Lista de Objetos Categoria
     ArrayList<Channel> channels = null; //Lista de Objetos Channel
     ChannelResponse channelResponse; //Recibe la respuesta de API
 
     double volumen = 1;
     String stream = "";
-
+    String auth, id_categoria;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,19 +74,14 @@ public class PlayerActivityTV extends Activity {
         /**
          * Referencia de elementos Visuales
          * */
-        // Botones de control de player
-        //btnPlayPause = findViewById(R.id.btn_playpause);
-        //btnFullscreen = findViewById(R.id.btn_fullscreen);
-        //Boton de Cerrar sesion
-        //btnLogout = findViewById(R.id.btnLogout);
         //Selector de Categorias
         sp_categorias = (Spinner) findViewById(R.id.sp_canales);
         //Lista de Canales
         listaCanales = (ListView) findViewById(R.id.lista_canales) ;
+        //Contenedor de mainLayout y menuLateral
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         //Contenedor Principal
         mainLayout = (ConstraintLayout) findViewById(R.id.mainLayout);
-        //Menu Lateral
         menuLateral = (ConstraintLayout) findViewById(R.id.menuLateral);
 
         //Poblando Spinner de Categorias con arraylist
@@ -106,47 +94,12 @@ public class PlayerActivityTV extends Activity {
          * FUNCIONES ONCLICK DE TODOS LOS ELEMENTOS EN PANTALLA
          */
 
-        /** Click boton Play/Pause **/
-        /*
-        btnPlayPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (theoPlayerView.getPlayer().isPaused()) {
-                    theoPlayerView.getPlayer().play();
-                } else {
-                    theoPlayerView.getPlayer().pause();
-                }
-            }
-        });
-        */
-
-        /** Click Boton Pantalla Completa **/
-        /*
-        btnFullscreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                theoPlayerView.getFullScreenManager().requestFullScreen();
-            }
-        });
-        */
-
-        /** Click boton Logout **/
-        /*
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postDataLogout(auth);
-            }
-        });
-        */
-
         /** Click en Select(Spinner) de Categorias **/
         sp_categorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Recupera nombre de Categoria seleccionada
+
                 id_categoria = Integer.toString(cat.get(position).getId());
-                //Toast.makeText(getApplicationContext(), "ID : " + id_categoria,Toast.LENGTH_LONG).show();
 
                 //Envia Arraylist Channel, a funcion que filtra canales por categoria
                 if (channelResponse != null) {
@@ -169,59 +122,14 @@ public class PlayerActivityTV extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Obtiene el objeto Canal, al que se le hizo click
                 Channel canal = channels.get(position);
-                //Toast.makeText(getApplicationContext(),canal.getStream_url(),Toast.LENGTH_LONG).show();
 
                 //Llamado para reiniciar el player con la Nueva URL
                 iniciarPlayer(canal.getStream_url());
             }
         });
 
-        /**
-         * METODOS DE THEOPLAYER
-         */
-        /*
-        theoPlayerView.getPlayer().addEventListener(PlayerEventTypes.PLAY, new EventListener<PlayEvent>() {
-            @Override
-            public void handleEvent(PlayEvent playEvent) {
-                //txtPlayStatus.setText("Playing");
-            }
-        });
-
-        theoPlayerView.getPlayer().addEventListener(PlayerEventTypes.PAUSE, new EventListener<PauseEvent>() {
-            @Override
-            public void handleEvent(PauseEvent pauseEvent) {
-                //txtPlayStatus.setText("Paused");
-            }
-        });
-
-        theoPlayerView.getPlayer().addEventListener(PlayerEventTypes.TIMEUPDATE, new EventListener<TimeUpdateEvent>() {
-            @Override
-            public void handleEvent(TimeUpdateEvent timeUpdateEvent) {
-                //txtTimeUpdate.setText(String.valueOf(timeUpdateEvent.getCurrentTime()));
-            }
-        });
-
-         */
     }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        theoPlayerView.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        theoPlayerView.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        theoPlayerView.onDestroy();
-    }
+    
 
     /**
      * Inicializa el player con URL
@@ -230,7 +138,7 @@ public class PlayerActivityTV extends Activity {
     public void iniciarPlayer(String url){
         //Si URL es vacia, asigne por defecto
         if(url == ""){
-            url = "https://xcdrsbsv-cf.beenet.com.sv/foxsports2_720/foxsports2_720_out/playlist.m3u8";  // B carga Bien
+            url = "https://xcdrsbsv-cf.beenet.com.sv/foxsports2_720/foxsports2_720_out/playlist.m3u8";
         }
 
         TypedSource typedSource = TypedSource.Builder
@@ -261,9 +169,10 @@ public class PlayerActivityTV extends Activity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 LoginResponse loginResponse = response.body();
                 if (loginResponse.getStatus_code() == 200){
-                    //Proceder a siguiente ventana
+
                     Toast.makeText(getApplicationContext(),"Sesion Cerrada",Toast.LENGTH_LONG).show();
-                    Toast.makeText(getApplicationContext(),loginResponse.getError_description(),Toast.LENGTH_LONG).show();
+
+                    //Volver a Inicio de Sesion
                     Intent intent = new Intent (getApplicationContext(), LoginActivityTV.class);
                     startActivityForResult(intent, 0);
 
@@ -343,7 +252,7 @@ public class PlayerActivityTV extends Activity {
                 channels = new ArrayList<>();
 
                 if (channelResponse != null){
-                    Toast.makeText(getApplicationContext(),"Objeto Lleno",Toast.LENGTH_LONG).show();
+                    // Cargar canales por filtro 0 = TODOS
                     loadChannelsByFilter(channelResponse,"0");
                 }else{
                     Toast.makeText(getApplicationContext(), "Objeto Vacio", Toast.LENGTH_LONG).show();
@@ -398,21 +307,17 @@ public class PlayerActivityTV extends Activity {
 
     }
 
-    /**
-     * Metodo que captura acciones del D-PAD
-     * */
+    /** Metodo que captura acciones del D-PAD **/
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         boolean handled = false;
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                // ... handle left action
                 handled = true;
                 openList();
                 break;
 
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                // ... handle right action
                 handled = true;
                 closeList();
                 break;
@@ -422,7 +327,6 @@ public class PlayerActivityTV extends Activity {
                 //Llamar a la funcion cerrar sesion
                 postDataLogout(auth);
                 break;
-
         }
 
         return handled || super.onKeyDown(keyCode, event);
@@ -435,31 +339,11 @@ public class PlayerActivityTV extends Activity {
         }
     }
 
+    /** Funcion Oculta lista lateral **/
     public void closeList(){
         if (drawerLayout.isDrawerOpen(menuLateral)){
             drawerLayout.closeDrawer(menuLateral);
         }
     }
-
-    /*
-    public void nextChannel(){
-        Toast.makeText(getApplicationContext(),"EN NEXTCHANNEL: " + theoPlayerView.getFullScreenManager().isFullScreen(),Toast.LENGTH_SHORT).show();
-        System.out.println("------------------------------------------");
-        if (!theoPlayerView.getFullScreenManager().isFullScreen()){
-            System.out.println("VALOR: " + theoPlayerView.getFullScreenManager().isFullScreen() + " IR A SIGUIENTE CANAL");
-            Toast.makeText(getApplicationContext(), "IR A SIGUIENTE CANAL", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void previusChannel(){
-        Toast.makeText(getApplicationContext(),"EN PREVIUSCHANNEL: " + theoPlayerView.getFullScreenManager().isFullScreen(),Toast.LENGTH_SHORT).show();
-        System.out.println("-----------------------------------------------------------------------------");
-        if (!theoPlayerView.getFullScreenManager().isFullScreen()){
-            System.out.println("VALOR: " + theoPlayerView.getFullScreenManager().isFullScreen() + " IR A CANAL PREVIO");
-            Toast.makeText(getApplicationContext(), " IR A CANAL PREVIO", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-     */
 
 }

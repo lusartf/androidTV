@@ -5,6 +5,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
+    /**
+     * Inicializando Retrofit con URL Base.
+     * Metodo getApi(), hace referencia a la Interfaz Api; donde se sencuentran las llamadas a las Funciones de la API
+     * */
+
     private static final String BASE_URL = "http://mago.beenet.com.sv/";
     private static RetrofitClient retrofitClient;
     private Retrofit retrofit;

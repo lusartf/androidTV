@@ -7,22 +7,18 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.constraintlayout.solver.widgets.WidgetContainer;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.theoplayertv.R;
 import com.example.theoplayertv.adapters.AdapterChannels;
 import com.example.theoplayertv.api.RetrofitClient;
-import com.example.theoplayertv.models.Categoria;
-import com.example.theoplayertv.models.CategoriasResponse;
+import com.example.theoplayertv.models.Category;
+import com.example.theoplayertv.models.CategoryResponse;
 import com.example.theoplayertv.models.Channel;
 import com.example.theoplayertv.models.ChannelResponse;
 import com.example.theoplayertv.models.LoginResponse;
@@ -55,7 +51,7 @@ public class PlayerActivityTV extends Activity {
     ListView listaCanales;
     AdapterChannels adapterChannels;
 
-    List<Categoria> cat = null;  //Lista de Objetos Categoria
+    List<Category> cat = null;  //Lista de Objetos Categoria
     ArrayList<Channel> channels = null; //Lista de Objetos Channel
     ChannelResponse channelResponse; //Recibe la respuesta de API
 
@@ -288,29 +284,29 @@ public class PlayerActivityTV extends Activity {
      * parametro: Auth contiene la clave utilizada para transacciones con la API
      * */
     public void loadCategories(final String auth){
-        Call<CategoriasResponse> call = RetrofitClient
+        Call<CategoryResponse> call = RetrofitClient
                 .getInstance()
                 .getApi()
                 .allCategories(auth);
 
-        call.enqueue(new Callback<CategoriasResponse>() {
+        call.enqueue(new Callback<CategoryResponse>() {
             @Override
-            public void onResponse(Call<CategoriasResponse> call, Response<CategoriasResponse> response) {
-                CategoriasResponse categoryResponse = response.body();
+            public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
+                CategoryResponse categoryResponse = response.body();
 
                 cat = new ArrayList<>();
 
                 if(categoryResponse != null){
                     //Agregando una Categoria 'TODOS'
-                    cat.add(new Categoria(0,"Todos"));
+                    cat.add(new Category(0,"Todos"));
 
                     //Agregar Categorias a Spinner Categoria
-                    for (Categoria categoria : categoryResponse.getResponse_object()) {
+                    for (Category category : categoryResponse.getResponse_object()) {
 
-                        cat.add(new Categoria(categoria.getId(),categoria.getName()));
+                        cat.add(new Category(category.getId(), category.getName()));
                     }
 
-                    ArrayAdapter<Categoria> arrayAdapter = new ArrayAdapter<>(getApplicationContext(),
+                    ArrayAdapter<Category> arrayAdapter = new ArrayAdapter<>(getApplicationContext(),
                             android.R.layout.simple_dropdown_item_1line,
                             cat);
                     sp_categorias.setAdapter(arrayAdapter);
@@ -322,7 +318,7 @@ public class PlayerActivityTV extends Activity {
             }
 
             @Override
-            public void onFailure(Call<CategoriasResponse> call, Throwable t) {
+            public void onFailure(Call<CategoryResponse> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                 System.out.println("*********************** ERROR: " + t.getMessage());
             }

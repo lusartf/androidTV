@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.theoplayertv.R;
 
-import com.example.theoplayertv.models.Categoria;
+import com.example.theoplayertv.models.Category;
 import com.example.theoplayertv.models.Channel;
 
 import java.util.ArrayList;
@@ -19,9 +19,13 @@ import java.util.List;
 
 public class AdapterChannels extends BaseAdapter {
 
+    /**
+     * Adaptador de canales utilizado para "inflar" el listview de canales lateral
+     * */
+
     private Context context;
     private ArrayList<Channel> listItems;
-    private List<Categoria> listCategoria;
+    private List<Category> listCategory;
     private String genero;
 
     public AdapterChannels(Context context, ArrayList<Channel> listItems) {
@@ -29,10 +33,10 @@ public class AdapterChannels extends BaseAdapter {
         this.listItems = listItems;
     }
 
-    public AdapterChannels(Context context, ArrayList<Channel> listItems, List<Categoria> listCategoria) {
+    public AdapterChannels(Context context, ArrayList<Channel> listItems, List<Category> listCategory) {
         this.context = context;
         this.listItems = listItems;
-        this.listCategoria = listCategoria;
+        this.listCategory = listCategory;
     }
 
     @Override
@@ -50,12 +54,15 @@ public class AdapterChannels extends BaseAdapter {
         return 0;
     }
 
+    /**
+     * getView: El metodo crea cada item para el listview
+     * */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         Channel channel = (Channel) getItem(position);
 
-        //En este metodo se crea cada item para el listview
+
         convertView = LayoutInflater.from(context).inflate(R.layout.elemento_lista,null);
 
         ImageView logo = (ImageView) convertView.findViewById(R.id.logo_canal);
@@ -63,19 +70,16 @@ public class AdapterChannels extends BaseAdapter {
         TextView categoria = (TextView) convertView.findViewById(R.id.cat_canal);
         TextView url = (TextView) convertView.findViewById(R.id.url_canal);
 
-        //Recorriendo Arraylist de Categorias
-        //System.out.println("---------------------------------- Dentro de AdapterChannel --------------------------------------");
-        for (int i = 0; i < listCategoria.size(); i++){
-            //System.out.println("Categoria: " + listCategoria.get(i).getName());
+        //Recorriendo Arraylist de Categorias para traducir el id categoria en nombre
+        for (int i = 0; i < listCategory.size(); i++){
 
-            if (channel.getGenre_id().equals(Integer.toString(listCategoria.get(i).getId()))){
-                genero = listCategoria.get(i).getName();
-                System.out.println(" ------ ****** valor de genero: " + genero);
+            if (channel.getGenre_id().equals(Integer.toString(listCategory.get(i).getId()))){
+                genero = listCategory.get(i).getName();
             }
         }
 
-        //Llenado
-        //Se introduce la imagen dentro de ImageView con Glide,
+        // Seteado de un elemento del listview: Imagen,nombre, categoria, url
+        // Se introduce la imagen dentro de ImageView con Glide(declarado en proyecto/app/build.gradle)
         Glide
                 .with(context)
                 .load(channel.getIcon_url())

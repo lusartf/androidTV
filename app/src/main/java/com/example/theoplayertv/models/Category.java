@@ -1,6 +1,6 @@
 package com.example.theoplayertv.models;
 
-public class Categoria {
+public class Category {
 
     /**
      * Clase que modela el objeto JSON que trae las Categorias de la API
@@ -10,12 +10,12 @@ public class Categoria {
     private String name;
     private String icon;
 
-    public Categoria(int id, String name) {
+    public Category(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Categoria(int id, String name, String icon) {
+    public Category(int id, String name, String icon) {
         this.id = id;
         this.name = name;
         this.icon = icon;

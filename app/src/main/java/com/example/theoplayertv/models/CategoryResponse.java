@@ -2,7 +2,7 @@ package com.example.theoplayertv.models;
 
 import java.util.List;
 
-public class CategoriasResponse {
+public class CategoryResponse {
 
     /**
      * Clase que modela (CategoriaResponse + categoria) el objeto JSON de Categoria que proviene de API
@@ -12,9 +12,9 @@ public class CategoriasResponse {
     private int timestamp;
     private String error_description;
     private String extra_data;
-    private List<Categoria> response_object;
+    private List<Category> response_object;
 
-    public CategoriasResponse(int status_code, int error_code, int timestamp, String error_description, String extra_data, List<Categoria> response_object) {
+    public CategoryResponse(int status_code, int error_code, int timestamp, String error_description, String extra_data, List<Category> response_object) {
         this.status_code = status_code;
         this.error_code = error_code;
         this.timestamp = timestamp;
@@ -43,7 +43,7 @@ public class CategoriasResponse {
         return extra_data;
     }
 
-    public List<Categoria> getResponse_object() {
+    public List<Category> getResponse_object() {
         return response_object;
     }
 }

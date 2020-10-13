@@ -85,9 +85,7 @@ public class LoginActivityTV extends Activity {
                     e.printStackTrace();
                 }
 
-                System.out.println("/******* Data Encrypt: " + auth);
-
-                //Llamando a la API
+                //Llamando a la API para Login
                 postDataLogin(auth);
 
             }
@@ -95,9 +93,9 @@ public class LoginActivityTV extends Activity {
 
     }
 
-    /*
-    *  Funcion que envia datos a la API
-    * */
+    /**
+     * Funcion que envia datos a la API, recibe como paramentro valor encriptado
+     * */
     public void postDataLogin(final String auth){
         Call<LoginResponse> call = RetrofitClient.getInstance().getApi()
                 .userLogin(COMPANY_ID,APP_ID,APP_NAME,API_VERSION,APPVERSION,auth);
@@ -107,11 +105,11 @@ public class LoginActivityTV extends Activity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 LoginResponse loginResponse = response.body();
                 if (loginResponse.getStatus_code() == 200){
-                    //Proceder a siguiente ventana
-                    Toast.makeText(getApplicationContext(),loginResponse.getError_description(),Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent (getApplicationContext(), PlayerActivityTV.class);
 
-                    //Enviando parametro a segundo activity
+                    //System.out.println("ERROR: " + loginResponse.getError_description());
+
+                    //Llamada siguiente ventana PlayerActivity.class y Enviando parametro auth
+                    Intent intent = new Intent (getApplicationContext(), PlayerActivityTV.class);
                     Bundle myBundle = new Bundle();
                     myBundle.putString("auth",auth);
                     intent.putExtras(myBundle);
@@ -129,9 +127,9 @@ public class LoginActivityTV extends Activity {
         });
     }
 
-    /*
-    *   Funcion de Encriptamiento AES/CBS, recibe como parametro: Cadena y Llave de Encriptamiento
-    * */
+    /**
+     * Funcion de Encriptamiento AES/CBS, recibe como parametro: Cadena y Llave de Encriptamiento
+     * */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String encrypt(String dato, String key) throws UnsupportedEncodingException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
 
@@ -141,7 +139,7 @@ public class LoginActivityTV extends Activity {
         IvParameterSpec iv = new IvParameterSpec(key.getBytes());
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
         byte[] encrypted = cipher.doFinal(dato.getBytes("utf-8"));
-        //return new BASE64Encoder().encode(encrypted);
+
         return Base64.getEncoder().encodeToString(encrypted);
 
     }

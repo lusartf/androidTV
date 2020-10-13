@@ -1,6 +1,6 @@
 package com.example.theoplayertv.api;
 
-import com.example.theoplayertv.models.CategoriasResponse;
+import com.example.theoplayertv.models.CategoryResponse;
 import com.example.theoplayertv.models.ChannelResponse;
 import com.example.theoplayertv.models.LoginResponse;
 
@@ -10,6 +10,12 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface Api {
+
+    /**
+     *  Llamadas a los metodos API.
+     *  El cliente para hacer Peticiones es Retrofit y se encuentra inicializado en api/RetrofitClient
+     *
+     * */
 
     @FormUrlEncoded
     @POST("apiv2/credentials/login")
@@ -30,7 +36,7 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("apiv2/channels/genre")
-    Call<CategoriasResponse> allCategories(
+    Call<CategoryResponse> allCategories(
         @Field("auth") String auth
     );
 

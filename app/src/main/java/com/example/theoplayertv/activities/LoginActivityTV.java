@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +21,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -81,6 +81,7 @@ public class LoginActivityTV extends Activity {
                 //Encriptar data
                 try {
                     auth = encrypt(data,ENCRYPTION_KEY);
+
                 } catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
                     e.printStackTrace();
                 }
@@ -140,7 +141,16 @@ public class LoginActivityTV extends Activity {
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
         byte[] encrypted = cipher.doFinal(dato.getBytes("utf-8"));
 
-        return Base64.getEncoder().encodeToString(encrypted);
+        /**
+         *  java.util.Base64 solo esta disponible en Android a partir de API 26
+         * */
+        //return Base64.getEncoder().encodeToString(encrypted);
+
+        /**
+         *  Android.util.Base64 es compatible con la mayoria de niveles de API
+         **/
+        return Base64.encodeToString(encrypted,Base64.DEFAULT);
+
 
     }
 }

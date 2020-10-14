@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_index"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="MissingTvBanner">
 
         <activity android:name=".activities.PlayerActivityTV"
             android:label="@string/app_name"

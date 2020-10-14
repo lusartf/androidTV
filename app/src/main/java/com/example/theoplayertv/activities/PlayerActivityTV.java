@@ -129,7 +129,7 @@ public class PlayerActivityTV extends Activity {
         });
 
     }
-    
+
 
     /**
      * Inicializa el player con URL

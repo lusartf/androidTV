@@ -62,7 +62,6 @@ public class AdapterChannels extends BaseAdapter {
 
         Channel channel = (Channel) getItem(position);
 
-
         convertView = LayoutInflater.from(context).inflate(R.layout.elemento_lista,null);
 
         ImageView logo = (ImageView) convertView.findViewById(R.id.logo_canal);

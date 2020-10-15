@@ -3,6 +3,7 @@ package com.example.theoplayertv.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +24,7 @@ import com.example.theoplayertv.models.Channel;
 import com.example.theoplayertv.models.ChannelResponse;
 import com.example.theoplayertv.models.LoginResponse;
 import com.theoplayer.android.api.THEOplayerView;
+import com.theoplayer.android.api.cache.Cache;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.SourceType;
 import com.theoplayer.android.api.source.TypedSource;
@@ -88,6 +90,7 @@ public class PlayerActivityTV extends Activity {
         loadCategories(auth);
 
         //Poblando listview de Canales
+        listaCanales.setSelector(R.color.transparent); //color transparente en el focus de listview
         getChannelResponse(auth);
 
         /**
@@ -144,6 +147,7 @@ public class PlayerActivityTV extends Activity {
         TypedSource typedSource = TypedSource.Builder
                 .typedSource()
                 .src(url)
+                .lowLatency(true)
                 .type(SourceType.HLS)
                 .build();
 
@@ -152,7 +156,7 @@ public class PlayerActivityTV extends Activity {
                 .build();
 
         theoPlayerView.getPlayer().setSource(sourceDescription);
-        theoPlayerView.getPlayer().setPreload(PreloadType.METADATA);
+        theoPlayerView.getPlayer().setPreload(PreloadType.AUTO);
 
     }
 

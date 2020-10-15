@@ -220,7 +220,7 @@ public class PlayerActivityTV extends Activity {
                     }
 
                     ArrayAdapter<Category> arrayAdapter = new ArrayAdapter<>(getApplicationContext(),
-                            android.R.layout.simple_dropdown_item_1line,
+                            R.layout.spinner_item,
                             cat);
                     sp_categorias.setAdapter(arrayAdapter);
 

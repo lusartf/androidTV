@@ -109,6 +109,7 @@ public class LoginActivityTV extends Activity {
 
                     //System.out.println("ERROR: " + loginResponse.getError_description());
 
+                    Toast.makeText(getApplicationContext(),"Sesion Iniciada",Toast.LENGTH_LONG).show();
                     //Llamada siguiente ventana PlayerActivity.class y Enviando parametro auth
                     Intent intent = new Intent (getApplicationContext(), PlayerActivityTV.class);
                     Bundle myBundle = new Bundle();

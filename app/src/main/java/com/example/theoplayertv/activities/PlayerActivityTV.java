@@ -174,7 +174,7 @@ public class PlayerActivityTV extends Activity {
                 LoginResponse loginResponse = response.body();
                 if (loginResponse.getStatus_code() == 200){
 
-                    Toast.makeText(getApplicationContext(),"Sesion Cerrada",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Sesion Finalizada",Toast.LENGTH_LONG).show();
 
                     //Volver a Inicio de Sesion
                     Intent intent = new Intent (getApplicationContext(), LoginActivityTV.class);

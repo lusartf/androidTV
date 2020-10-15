@@ -23,6 +23,7 @@ import com.example.theoplayertv.models.CategoryResponse;
 import com.example.theoplayertv.models.Channel;
 import com.example.theoplayertv.models.ChannelResponse;
 import com.example.theoplayertv.models.LoginResponse;
+import com.muddzdev.styleabletoast.StyleableToast;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.cache.Cache;
 import com.theoplayer.android.api.source.SourceDescription;
@@ -175,6 +176,7 @@ public class PlayerActivityTV extends Activity {
                 if (loginResponse.getStatus_code() == 200){
 
                     Toast.makeText(getApplicationContext(),"Sesion Finalizada",Toast.LENGTH_LONG).show();
+                    //StyleableToast.makeText(getApplicationContext(),"Sesion Finalizada",R.style.msgToast).show();
 
                     //Volver a Inicio de Sesion
                     Intent intent = new Intent (getApplicationContext(), LoginActivityTV.class);

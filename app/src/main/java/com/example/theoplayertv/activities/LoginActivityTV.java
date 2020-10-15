@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi;
 import com.example.theoplayertv.R;
 import com.example.theoplayertv.api.RetrofitClient;
 import com.example.theoplayertv.models.LoginResponse;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -110,6 +111,7 @@ public class LoginActivityTV extends Activity {
                     //System.out.println("ERROR: " + loginResponse.getError_description());
 
                     Toast.makeText(getApplicationContext(),"Sesion Iniciada",Toast.LENGTH_LONG).show();
+                    //StyleableToast.makeText(getApplicationContext(),"Sesion Iniciada",R.style.msgToast).show();
                     //Llamada siguiente ventana PlayerActivity.class y Enviando parametro auth
                     Intent intent = new Intent (getApplicationContext(), PlayerActivityTV.class);
                     Bundle myBundle = new Bundle();

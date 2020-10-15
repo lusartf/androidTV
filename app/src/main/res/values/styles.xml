@@ -7,4 +7,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="msgToast">
+        <item name="stColorBackground">#F5F6F6</item>
+        <item name="stTextColor">#000</item>
+        <item name="stIconEnd">@drawable/ic_android</item>
+        <item name="stStrokeColor">#F6A020</item>
+        <item name="strokeWidth">3dp</item>
+        <item name="stLength">LONG</item>
+        <item name="cornerRadius">3dp</item>
+    </style>
+
 </resources>

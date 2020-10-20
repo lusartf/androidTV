@@ -157,7 +157,7 @@ public class PlayerActivityTV extends Activity {
                 .build();
 
         theoPlayerView.getPlayer().setSource(sourceDescription);
-        theoPlayerView.getPlayer().setPreload(PreloadType.AUTO);
+        //theoPlayerView.getPlayer().setPreload(PreloadType.AUTO);
 
     }
 

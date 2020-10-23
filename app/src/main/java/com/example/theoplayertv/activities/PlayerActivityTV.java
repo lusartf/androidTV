@@ -1,6 +1,9 @@
 package com.example.theoplayertv.activities;
 
 import android.app.Activity;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -23,7 +26,7 @@ import com.example.theoplayertv.models.CategoryResponse;
 import com.example.theoplayertv.models.Channel;
 import com.example.theoplayertv.models.ChannelResponse;
 import com.example.theoplayertv.models.LoginResponse;
-import com.muddzdev.styleabletoast.StyleableToast;
+//import com.muddzdev.styleabletoast.StyleableToast;
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.cache.Cache;
 import com.theoplayer.android.api.source.SourceDescription;
@@ -331,7 +334,26 @@ public class PlayerActivityTV extends Activity {
             case KeyEvent.KEYCODE_BACK:
                 handled = true;
                 //Llamar a la funcion cerrar sesion
-                postDataLogout(auth);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Quieres salir de la Aplicacion?");
+                builder.setTitle("Salir");
+                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        postDataLogout(auth);
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
                 break;
         }
 

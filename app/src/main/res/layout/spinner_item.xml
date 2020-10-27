@@ -5,5 +5,5 @@
     android:layout_width="match_parent"
     android:textSize="15dp"
     android:gravity="start"
-    android:textColor="#FFFFFF"
+    android:textColor="#FDFDFD"
     android:padding="10dp"/>

@@ -47,6 +47,7 @@ public class PlayerActivityTV extends Activity {
     DrawerLayout drawerLayout; //Permite el despliegue de menu lateral en conjunto con mainLayout y menuLateral
     ConstraintLayout mainLayout, menuLateral;
     THEOplayerView theoPlayerView;
+    LatencyManager latencyManager;
     Spinner sp_categorias;
     ListView listaCanales;
     AdapterChannels adapterChannels;
@@ -151,7 +152,9 @@ public class PlayerActivityTV extends Activity {
         TypedSource typedSource = TypedSource.Builder
                 .typedSource()
                 .src(url)
+                .liveOffset(1.0)
                 .lowLatency(true)
+                .timeServer("https://time.theoplayer.com")
                 .type(SourceType.HLS)
                 .build();
 
@@ -161,6 +164,33 @@ public class PlayerActivityTV extends Activity {
 
         theoPlayerView.getPlayer().setSource(sourceDescription);
         //theoPlayerView.getPlayer().setPreload(PreloadType.AUTO);
+
+        //Intialise the Latency Manager Configuration
+        LatencyManagerConfiguration config = new LatencyManagerConfigurationBuilder()
+                .targetLatency(1000) //target latency value the player must acheive
+                .timeServer(typedSource.getTimeServer()) //instance of TimeServer must support timeserver.getServerTime() : Date()
+                .interval(100) //frequency of the update event to be fired 200 is in ms
+                .fireUpdate(true) //To keep sending the data between the Javascript and Java
+                .latencyWindow(100)  //window around targetlatency the manager will consider in sync
+                .rateChange(0.07)  ////maximum increase/decrease in speed of the player
+                .seekWindow(1000) // //window around targetlatency the manager considers to fire seek command rather than change playbackrate
+                .sync(true).build();  //Set to true to use the Latency Manager to sync with the configs
+
+        /*
+        LatencyManagerConfiguration config = new LatencyManagerConfigurationBuilder()
+                .targetLatency(5000) //target latency value the player must acheive
+                .timeServer("https://time.theoplayer.com") //instance of TimeServer must support timeserver.getServerTime() : Date()
+                .interval(200) //frequency of the update event to be fired 200 is in ms
+                .fireUpdate(true) //To keep sending the data between the Javascript and Java
+                .latencyWindow(250)  //window around targetlatency the manager will consider in sync
+                .rateChange(0.08)  ////maximum increase/decrease in speed of the player
+                .seekWindow(5000) // //window around targetlatency the manager considers to fire seek command rather than change playbackrate
+                .sync(true).build();  //Set to true to use the Latency Manager to sync with the configs
+        */
+
+        //Intialise the Latency Manager with the defined config
+        latencyManager = new LatencyManager(theoPlayerView,config);
+
 
     }
 

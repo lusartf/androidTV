@@ -20,13 +20,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     /* both mobile and TV */
-    //implementation(name:'theoplayer21', ext:'aar')
     implementation(name:'theoplayer_fireTV', ext:'aar')
     implementation 'com.google.code.gson:gson:2.8.2' /* only TV */
     implementation 'androidx.leanback:leanback:1.0.0'

@@ -8,7 +8,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.example.theoplayertv.R;
+/*
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.event.EventListener;
 import com.theoplayer.android.api.event.player.PauseEvent;
@@ -19,7 +21,7 @@ import com.theoplayer.android.api.event.player.TimeUpdateEvent;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.SourceType;
 import com.theoplayer.android.api.source.TypedSource;
-
+*/
 
 
 

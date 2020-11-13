@@ -2,15 +2,17 @@ package com.example.theoplayertv.activities;
 
 import android.util.Log;
 import android.webkit.ValueCallback;
-
+/*
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.message.MessageListener;
 
+ */
+
 public class LatencyManager {
 
-    THEOplayerView tpv;
+    //THEOplayerView tpv;
     private LatencyParameters _latency = null;
-
+    /*
     public LatencyManager(THEOplayerView view) {
         tpv = view;
         configuration = new LatencyManagerConfiguration();
@@ -155,5 +157,5 @@ public class LatencyManager {
             Log.i("LATENCY", result);
         });
     }
-
+    */
 }

@@ -30,7 +30,13 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     /* both mobile and TV */
-    implementation(name:'theoplayer_fireTV', ext:'aar')
+    //implementation(name:'theoplayer_fireTV', ext:'aar')
+    /* Exoplayer */
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.12.0'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.12.0'
+    implementation 'com.google.android.exoplayer:exoplayer-hls:2.12.0'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.12.0'
+
     implementation 'com.google.code.gson:gson:2.8.2' /* only TV */
     implementation 'androidx.leanback:leanback:1.0.0'
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'

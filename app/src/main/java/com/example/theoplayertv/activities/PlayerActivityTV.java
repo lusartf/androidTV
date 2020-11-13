@@ -1,5 +1,6 @@
 package com.example.theoplayertv.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 
 import android.app.AlertDialog;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -26,16 +28,31 @@ import com.example.theoplayertv.models.CategoryResponse;
 import com.example.theoplayertv.models.Channel;
 import com.example.theoplayertv.models.ChannelResponse;
 import com.example.theoplayertv.models.LoginResponse;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.BehindLiveWindowException;
+import com.google.android.exoplayer2.source.hls.playlist.HlsPlaylistTracker;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 //import com.muddzdev.styleabletoast.StyleableToast;
+/*
 import com.theoplayer.android.api.THEOplayerView;
 import com.theoplayer.android.api.cache.Cache;
 import com.theoplayer.android.api.source.SourceDescription;
 import com.theoplayer.android.api.source.SourceType;
 import com.theoplayer.android.api.source.TypedSource;
 import com.theoplayer.android.api.player.PreloadType;
+ */
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.sql.DataSource;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,8 +63,14 @@ public class PlayerActivityTV extends Activity {
 
     DrawerLayout drawerLayout; //Permite el despliegue de menu lateral en conjunto con mainLayout y menuLateral
     ConstraintLayout mainLayout, menuLateral;
-    THEOplayerView theoPlayerView;
-    LatencyManager latencyManager;
+
+    /* Exoplayer */
+    private PlayerView playerView;
+    private SimpleExoPlayer player;
+    private boolean playWhenReady = true;
+    private int currentWindow = 0;
+    private long playbackPosition = 0;
+
     Spinner sp_categorias;
     ListView listaCanales;
     AdapterChannels adapterChannels;
@@ -56,7 +79,7 @@ public class PlayerActivityTV extends Activity {
     ChannelResponse channelResponse; //Recibe la respuesta de API
 
     double volumen = 1;
-    String stream = "";
+    public String stream = "";
     String auth, id_categoria;;
 
     @Override
@@ -65,12 +88,8 @@ public class PlayerActivityTV extends Activity {
         setContentView(R.layout.activity_main);
 
         //Referenciando y parametros de Theoplayer
-        theoPlayerView = findViewById(R.id.theoplayer);
-        theoPlayerView.getSettings().setFullScreenOrientationCoupled(true);
+        playerView = findViewById(R.id.video_view);
         iniciarPlayer(stream);
-        theoPlayerView.getPlayer().setAutoplay(true);
-        theoPlayerView.getPlayer().setVolume(volumen);
-
 
         //Recuperando valor enviado proveniente de LoginActivityTV
         Bundle myBundle = this.getIntent().getExtras();
@@ -132,12 +151,139 @@ public class PlayerActivityTV extends Activity {
                 Channel canal = channels.get(position);
 
                 //Llamado para reiniciar el player con la Nueva URL
+                stream = canal.getStream_url();
                 iniciarPlayer(canal.getStream_url());
             }
         });
 
     }
 
+
+    /**
+     * Metodos de Exoplayer
+     * */
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            iniciarPlayer(stream);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        hideSystemUi();
+        if ((Util.SDK_INT <= 23 || player == null)) {
+            iniciarPlayer(stream);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
+    private void releasePlayer() {
+        if (player != null) {
+            playbackPosition = player.getCurrentPosition();
+            currentWindow = player.getCurrentWindowIndex();
+            playWhenReady = player.getPlayWhenReady();
+            player.release();
+            player = null;
+        }
+    }
+
+    @SuppressLint("InlinedApi")
+    private void hideSystemUi() {
+        playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+
+    private class PlayerEventListener implements Player.EventListener {
+
+        /*
+        @Override
+        public void onPlaybackStateChanged(@Player.State int playbackState) {
+            if (playbackState == Player.STATE_ENDED) {
+                showControls();
+            }
+            updateButtonVisibility();
+        }
+        */
+
+        @Override
+        public void onPlayerError(@NonNull ExoPlaybackException e) {
+
+            if (isBehindLiveWindow(e)) {
+                //clearStartPosition();
+                //initializePlayer();
+                //Toast.makeText(getApplicationContext(),"-----*** ERROR DE BehindLiveWindow ***-----",Toast.LENGTH_LONG).show();
+                //System.out.println("---------------************* ERROR ***********-----------------");
+                iniciarPlayer(stream);
+            } else {
+                //updateButtonVisibility();
+                //showControls();
+            }
+
+
+        }
+
+        /*
+        @Override
+        @SuppressWarnings("ReferenceEquality")
+        public void onTracksChanged(
+                @NonNull TrackGroupArray trackGroups, @NonNull TrackSelectionArray trackSelections) {
+            updateButtonVisibility();
+            if (trackGroups != lastSeenTrackGroupArray) {
+                MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
+                if (mappedTrackInfo != null) {
+                    if (mappedTrackInfo.getTypeSupport(C.TRACK_TYPE_VIDEO)
+                            == MappedTrackInfo.RENDERER_SUPPORT_UNSUPPORTED_TRACKS) {
+                        showToast(R.string.error_unsupported_video);
+                    }
+                    if (mappedTrackInfo.getTypeSupport(C.TRACK_TYPE_AUDIO)
+                            == MappedTrackInfo.RENDERER_SUPPORT_UNSUPPORTED_TRACKS) {
+                        showToast(R.string.error_unsupported_audio);
+                    }
+                }
+                lastSeenTrackGroupArray = trackGroups;
+            }
+        }
+        */
+    }
+
+    private static boolean isBehindLiveWindow(ExoPlaybackException e) {
+        if (e.type != ExoPlaybackException.TYPE_SOURCE) {
+            return false;
+        }
+        Throwable cause = e.getSourceException();
+        while (cause != null) {
+            if (cause instanceof BehindLiveWindowException) {
+                return true;
+            }
+            if (cause instanceof HlsPlaylistTracker.PlaylistStuckException){
+                return true;
+            }
+            cause = cause.getCause();
+        }
+        return false;
+    }
 
     /**
      * Inicializa el player con URL
@@ -149,48 +295,30 @@ public class PlayerActivityTV extends Activity {
             url = "https://xcdrsbsv-cf.beenet.com.sv/foxsports2_720/foxsports2_720_out/playlist.m3u8";
         }
 
-        TypedSource typedSource = TypedSource.Builder
-                .typedSource()
-                .src(url)
-                .liveOffset(1.0)
-                .lowLatency(true)
-                .timeServer("https://time.theoplayer.com")
-                .type(SourceType.HLS)
+        //Toast.makeText(getApplicationContext(),"dentro de IniciarPlayer()",Toast.LENGTH_LONG).show();
+
+        if (player == null) {
+            DefaultTrackSelector trackSelector = new DefaultTrackSelector(this);
+            trackSelector.setParameters(
+                    trackSelector.buildUponParameters().setMaxVideoSizeSd());
+
+            player = new SimpleExoPlayer.Builder(this)
+                    .setTrackSelector(trackSelector)
+                    .build();
+        }
+
+        player.addListener(new PlayerEventListener());
+        playerView.setPlayer(player);
+
+
+        MediaItem mediaItem = new MediaItem.Builder()
+                .setUri(url)
                 .build();
+        player.setMediaItem(mediaItem);
 
-        SourceDescription sourceDescription = SourceDescription.Builder
-                .sourceDescription(typedSource)
-                .build();
-
-        theoPlayerView.getPlayer().setSource(sourceDescription);
-        //theoPlayerView.getPlayer().setPreload(PreloadType.AUTO);
-
-        //Intialise the Latency Manager Configuration
-        LatencyManagerConfiguration config = new LatencyManagerConfigurationBuilder()
-                .targetLatency(1000) //target latency value the player must acheive
-                .timeServer(typedSource.getTimeServer()) //instance of TimeServer must support timeserver.getServerTime() : Date()
-                .interval(100) //frequency of the update event to be fired 200 is in ms
-                .fireUpdate(true) //To keep sending the data between the Javascript and Java
-                .latencyWindow(100)  //window around targetlatency the manager will consider in sync
-                .rateChange(0.07)  ////maximum increase/decrease in speed of the player
-                .seekWindow(1000) // //window around targetlatency the manager considers to fire seek command rather than change playbackrate
-                .sync(true).build();  //Set to true to use the Latency Manager to sync with the configs
-
-        /*
-        LatencyManagerConfiguration config = new LatencyManagerConfigurationBuilder()
-                .targetLatency(5000) //target latency value the player must acheive
-                .timeServer("https://time.theoplayer.com") //instance of TimeServer must support timeserver.getServerTime() : Date()
-                .interval(200) //frequency of the update event to be fired 200 is in ms
-                .fireUpdate(true) //To keep sending the data between the Javascript and Java
-                .latencyWindow(250)  //window around targetlatency the manager will consider in sync
-                .rateChange(0.08)  ////maximum increase/decrease in speed of the player
-                .seekWindow(5000) // //window around targetlatency the manager considers to fire seek command rather than change playbackrate
-                .sync(true).build();  //Set to true to use the Latency Manager to sync with the configs
-        */
-
-        //Intialise the Latency Manager with the defined config
-        latencyManager = new LatencyManager(theoPlayerView,config);
-
+        player.setPlayWhenReady(playWhenReady);
+        player.seekTo(currentWindow, playbackPosition);
+        player.prepare();
 
     }
 
@@ -210,10 +338,11 @@ public class PlayerActivityTV extends Activity {
 
                     Toast.makeText(getApplicationContext(),"Sesion Finalizada",Toast.LENGTH_LONG).show();
                     //StyleableToast.makeText(getApplicationContext(),"Sesion Finalizada",R.style.msgToast).show();
-
                     //Volver a Inicio de Sesion
                     Intent intent = new Intent (getApplicationContext(), LoginActivityTV.class);
                     startActivityForResult(intent, 0);
+
+                    finish();
 
                 }else{
                     Toast.makeText(getApplicationContext(), loginResponse.getError_description(), Toast.LENGTH_LONG).show();
